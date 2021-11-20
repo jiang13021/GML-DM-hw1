@@ -1,0 +1,10 @@
+ACTOR_PATH = "dataset/actor/"
+CHAMELEON_PATH = "dataset/chameleon/"
+CORA_PATH = "dataset/cora/"
+
+EDGE_LIST_FILENAME = "edge_list.txt"
+FEATURE_FILENAME = "feature.txt"
+LABEL_FILENAME = "label.txt"
+TEST_NODES_FILENAME = "test_nodes.txt"
+TRAIN_NODES_FILENAME = "train_nodes.txt"
+VAL_NODES_FILENAME = "val_nodes.txt"
