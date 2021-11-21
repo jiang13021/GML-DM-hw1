@@ -1,6 +1,7 @@
 ACTOR_PATH = "dataset/actor/"
 CHAMELEON_PATH = "dataset/chameleon/"
 CORA_PATH = "dataset/cora/"
+EASY_PATH = "dataset/easy/"
 
 EDGE_LIST_FILENAME = "edge_list.txt"
 FEATURE_FILENAME = "feature.txt"
