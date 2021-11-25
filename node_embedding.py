@@ -51,7 +51,7 @@ def plot_embeddings(embeddings, dataset_path):
 if __name__ == "__main__":
     dataset_list = [CORA_PATH, CHAMELEON_PATH, ACTOR_PATH]
     for dataset in dataset_list:
-        print("dataset: " + dataset)
+        print("dataset: " + dataset[:-1])
         G = read_edge_list(dataset)
 
         # DeepWalk
@@ -61,6 +61,7 @@ if __name__ == "__main__":
         deepwalk_result = evaluate_embeddings(embeddings, dataset)
         print("DeepWalk: ", end="")
         print(deepwalk_result)
+        # 取消注释即可画图
         # plot_embeddings(embeddings, dataset)
 
         # Node2Vec
@@ -71,13 +72,16 @@ if __name__ == "__main__":
         node2vec_result = evaluate_embeddings(embeddings, dataset)
         print("Node2Vec: ", end="")
         print(node2vec_result)
+        # 取消注释即可画图
         # plot_embeddings(embeddings, dataset)
 
         # LINE
+        # 这一部分可能运行起来比较满，可以把order改为first或second，减小epochs
         model = LINE(G, embedding_size=128, order='all')
-        model.train(batch_size=1024, epochs=150, verbose=0)
+        model.train(batch_size=1024, epochs=150, verbose=1)
         embeddings = model.get_embeddings()
         node2vec_result = evaluate_embeddings(embeddings, dataset)
         print("LINE: ", end="")
         print(node2vec_result)
-        plot_embeddings(embeddings, dataset)
+        # 取消注释即可画图
+        # plot_embeddings(embeddings, dataset)

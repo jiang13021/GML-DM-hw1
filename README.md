@@ -18,6 +18,8 @@ Graph machine learning and data mining, homework1
 
 
 ## 任务一 网络数据分析
+> 运行degree_analysis.py即可得到第一部分的结果
+
 对比分析给定的三个不同数据集的性质
 - 图的平均节点度数；
 - 画出度分布直方图，横轴k代表度的取值，纵轴P(k)代表任取结点度数为k的概率；
@@ -79,6 +81,8 @@ dataset/actor's average clustering coefficient is 0.08019255113574139
 ```
 
 ## 任务二 浅层模型
+> 运行node_embedding.py即可获得第二部分的全部结果
+> 但是可能会很慢，瓶颈在于LINE，建议改小LINE的epoch，或者选用first/second-order
 ### 2.1 实现DeepWalk, Node2Vec, LINE
 参考 https://github.com/shenweichen/GraphEmbedding 的实现方式（源代码根据MIT协议开源），复制了其ge部分。
 

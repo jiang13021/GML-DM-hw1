@@ -117,10 +117,10 @@ if __name__ == '__main__':
         dataset = read_dataset_from_file(dataset_name)
         logger.info("{}'s average degree is {}".format(dataset_name[:-1], cal_avg_degree(dataset)))
 
-    # # 画出度分布直方图
-    # for dataset_name in dataset_list:
-    #     dataset = read_dataset_from_file(dataset_name)
-    #     draw_degree_distribution_histogram(dataset)
+    # 画出度分布直方图
+    for dataset_name in dataset_list:
+        dataset = read_dataset_from_file(dataset_name)
+        draw_degree_distribution_histogram(dataset)
 
     # 计算平均节点聚集系数
     for dataset_name in dataset_list:
