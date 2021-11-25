@@ -13,7 +13,7 @@ Graph machine learning and data mining, homework1
 - Python: 3.8.8
 - PyTorch: 1.10.0 py3.8_cpu_0
 - PyG: 2.0.2 py38_torch_1.10.0_cpu
-
+- tensorflow: 
 ## 任务一 网络数据分析
 对比分析给定的三个不同数据集的性质
 - 图的平均节点度数；
@@ -74,3 +74,80 @@ dataset/cora's average clustering coefficient is 0.24067329850193728
 dataset/chameleon's average clustering coefficient is 0.48135057608791076
 dataset/actor's average clustering coefficient is 0.08019255113574139
 ```
+
+## 任务二 浅层模型
+### 2.1 实现DeepWalk, Node2Vec, LINE
+参考 https://github.com/shenweichen/GraphEmbedding 的实现方式（源代码根据MIT协议开源），复制了其ge部分。
+
+#### 2.1.1 DeepWalk
+DeepWalk参考了Word2Vec的思路，因此，在完成随机游走（详细代码见walker.RandomWalker）后，我们可以直接借用gensim.models.Word2Vec来完成训练。
+
+#### 2.1.2 Node2Vec
+Node2Vec和DeepWalk的最区别在于对node序列的采样，它不是随机抽取相邻节点，而是按照p, q的概率进行抽取。p控制访问之前节点的概率，q允许随机游走区分“向内”
+和 “向外”节点。
+
+而采样完成后，后面的过程和DeepWalk类似
+
+#### 2.1.3 LINE
+论文中给出了两种相似度定义，其中first-order proximity只能用于无向图，用于描述顶点之间是否存在直连边。而second-order proximity
+用于描述顶点之间是否存在相似的邻居顶点。
+
+三个算法的对比会放在最后，这里我们像论文一样，对比LINE(1st), LINE(2nd), LINE(1st+2nd)的效果
+
+数据集选择：Cora, 参数选择：词向量维度 = 128, epochs = 50, batch_size=1024
+##### 结果如下
+| | Micro-f1 | Macro-f1 | Samples-f1 | Weighted-f1 | acc |
+| --- | --- | --- | --- | --- | --- |
+| LINE(1st) | 0.6942 | 0.6847 | 0.6942 | 0.6924 | 0.6942 |
+| LINE(2nd) | 0.7112 | 0.7002 | 0.7112 | 0.7099 | 0.7112 |
+| LINE(1st + 2nd) | 0.7496 | 0.7277 | 0.7496 | 0.7483 | 0.7496 |
+可以看出，基本上满足论文中的结果，LINE(1st + 2nd)的分类效果最优
+
+### 2.2 结果展示
+#### 2.2.1 参数选择
+词向量维度均为128
+
+DeepWalk: 每个顶点的游走路径数 = 50, 游走路径长度 = 20, Epoch = 5, 窗口大小w = 10
+
+Node2Vec: p = 0.25, q = 0.25, 其余参数与DeepWalk一致
+
+LINE: Epoch = 150, batch_size=1024, loss为1st+2nd
+
+#### 2.2.2 embedding 结果
+我们使用TSNE将得到的128维向量降维到2维，然后将其画出，可以看出，相同的颜色代表同类，基本都在相近的区域，说明embedding保持了其相似性。
+
+下图从左到右依次是 DeepWalk, Node2Vec, LINE的结果
+##### Cora:
+![cora_embedding](images/cora_embedding.png)
+
+##### Chameleon
+![chameleon_embedding](images/chameleon_embedding.png)
+
+##### Actor
+![actor_embedding](images/actor_embedding.png)
+#### 2.2.3 分类结果
+分类器采用sklearn的LogisticRegression，Metric选择：Micro-f1, Macro-f1, Samples-f1, Weighted-f1, acc
+
+##### Cora: 
+| | Micro-f1 | Macro-f1 | Samples-f1 | Weighted-f1 | acc |
+| --- | --- | --- | --- | --- | --- |
+| DeepWalk | 0.8358 | 0.8258 | 0.8358 | 0.8367 | 0.8358 |
+| Node2Vec | 0.8247 | 0.8081 | 0.8247 | 0.8240 | 0.8247 |
+| LINE | 0.7546 | 0.7343 | 0.7546 | 0.7534 | 0.7546 |
+
+##### Chameleon
+| | Micro-f1 | Macro-f1 | Samples-f1 | Weighted-f1 | acc |
+| --- | --- | --- | --- | --- | --- |
+| DeepWalk | 0.6250 | 0.6242 | 0.6250 | 0.6242 | 0.6250 |
+| Node2Vec | 0.5789 | 0.5756 | 0.5789 | 0.5775 | 0.5789 |
+| LINE | 0.6447 | 0.6445 | 0.6447 | 0.6448 | 0.6447 |
+
+##### Actor
+| | Micro-f1 | Macro-f1 | Samples-f1 | Weighted-f1 | acc |
+| --- | --- | --- | --- | --- | --- |
+| DeepWalk | 0.2184 | 0.1628 | 0.2184 | 0.1870 | 0.2184 |
+| Node2Vec | 0.2112 | 0.1601 | 0.2112 | 0.1847 | 0.2112 |
+| LINE | 0.2243 | 0.1845 | 0.2243 | 0.2077 | 0.2243 |
+
+实验结果显示，总体上看 LINE embedding后的分类效果略好于DeepWalk和Node2Vec。而DeepWalk的结果要优于Node2Vec。这于Node2Vec的论文情况不太一致，
+估计是由于参数选择导致的，而且总体上二者的结果比较接近，区别不大。
