@@ -13,7 +13,10 @@ Graph machine learning and data mining, homework1
 - Python: 3.8.8
 - PyTorch: 1.10.0 py3.8_cpu_0
 - PyG: 2.0.2 py38_torch_1.10.0_cpu
-- tensorflow: 
+- tensorflow: 2.3.0
+- gensim: 3.6.0
+
+
 ## 任务一 网络数据分析
 对比分析给定的三个不同数据集的性质
 - 图的平均节点度数；
@@ -101,6 +104,7 @@ Node2Vec和DeepWalk的最区别在于对node序列的采样，它不是随机抽
 | LINE(1st) | 0.6942 | 0.6847 | 0.6942 | 0.6924 | 0.6942 |
 | LINE(2nd) | 0.7112 | 0.7002 | 0.7112 | 0.7099 | 0.7112 |
 | LINE(1st + 2nd) | 0.7496 | 0.7277 | 0.7496 | 0.7483 | 0.7496 |
+
 可以看出，基本上满足论文中的结果，LINE(1st + 2nd)的分类效果最优
 
 ### 2.2 结果展示
