@@ -1,13 +1,6 @@
 # GML-DM-hw1
 Graph machine learning and data mining, homework1
 
-成员：江彦泽、俞越、陈励
-
-该README最后会作为报告提交，报告中包括：
-- 详细的实验过程
-- 遇到的问题和解决方案
-- 最后得到的分析性数据结果或结论
-
 环境信息：
 - 操作系统：Windows 10
 - Python: 3.8.8
